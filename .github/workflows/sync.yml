@@ -1,0 +1,23 @@
+name: Sync Docker Image To Aliyun
+on:
+  workflow_dispatch:
+
+jobs:
+  sync_image:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install skopeo
+        run: sudo apt update && sudo apt install -y skopeo
+
+      - name: Sync image
+        env:
+          ALI_REG: crpi-hhnhkp03op15g3f8.cn-hangzhou.personal.cr.aliyuncs.com
+          ALI_USER: 乌龙网客
+        run: |
+          skopeo copy \
+            docker://docker.io/tmoonlight/nspclient:latest \
+            docker://${ALI_REG}/zwnlove/nspclient:latest \
+            --dest-creds ${ALI_USER}:123369Zw
