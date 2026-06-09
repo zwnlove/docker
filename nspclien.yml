@@ -1,0 +1,20 @@
+name: Sync to Aliyun
+on:
+  workflow_dispatch:
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install skopeo
+        run: sudo apt install -y skopeo
+      - name: Sync image
+        env:
+          ALIYUN_REG: crpi-hhnhkp03op15g3f8.cn-hangzhou.personal.cr.aliyuncs.com
+          ALIYUN_USER: 乌龙冈客
+          ALIYUN_PWD: ${{ secrets.ALIYUN_PWD }}
+        run: |
+          skopeo copy \
+            docker://docker.io/tmoonlight/nspclient:latest \
+            docker://$ALIYUN_REG/zwnlove/zwnlove:latest \
+            --dest-creds $ALIYUN_USER:$ALIYUN_PWD
